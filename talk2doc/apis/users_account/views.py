@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from .models import TeleMedUser, DocSpecialty, Doctor, Patient, DocAvailableDate
-from .serializers import DocSpecialtySerializer, DoctorSerializer, PatientSerializer, TelemedUserSerializer
+from .models import Doctor, Patient, DocAvailableDate
+from .serializers import DoctorSerializer, PatientSerializer, TelemedUserSerializer
 from rest_framework import generics
 
 

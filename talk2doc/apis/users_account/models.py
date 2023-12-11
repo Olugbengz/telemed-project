@@ -26,14 +26,25 @@ class TeleMedUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
     
+    def fullname(self):
+        return '%s %s' % (self.first_name, self.last_name)
+    
 
     # @property
     # def is_staff(self):
     #     return self.is_admin
     
 
-class DocSpecialty(models.Model):
-   DOC_SPECIALTY = [
+# class DocSpecialty(models.Model):
+   
+#    specialty = models.CharField(max_length=30, choices=DOC_SPECIALTY, default='FAMILY MEDICINE')
+   
+#    def __str__(self):
+#        return self.specialty
+   
+
+class Doctor(models.Model):
+    DOC_SPECIALTY = [
         ('INTERNAL MEDICINE', 'Internal Medicine'),
         ('PEDIATRICIAN', 'Pediatrician'),
         ('ORTHOPEDIST', 'Orthopedist'),
@@ -55,13 +66,7 @@ class DocSpecialty(models.Model):
         ('ONCOLOGIST', 'Oncologist'),
         ('NEPHEROLOGIST', 'Nepherologist'),
     ]
-   specialty = models.CharField(max_length=30, choices=DOC_SPECIALTY, default='FAMILY MEDICINE')
-   
-   def __str__(self):
-       return self.specialty
-   
 
-class Doctor(models.Model):
     LANGUAGE = [
         ('English', 'English'),        
         ('Hausa', 'Hausa'),
@@ -70,7 +75,7 @@ class Doctor(models.Model):
     ]
 
     doctor = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    specialty = models.ForeignKey(DocSpecialty, related_name='doc_specialty', on_delete=models.CASCADE)
+    specialty = models.CharField(max_length=30, choices=DOC_SPECIALTY, default='Family Medicine')
     language = models.CharField(max_length=15, choices=LANGUAGE, default='ENGLISH')
     location = models.CharField(max_length=20)
     hospital = models.CharField(max_length=30)
@@ -80,7 +85,11 @@ class Doctor(models.Model):
     profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
 
     def __str__(self):
-        return f'{self.doctor.first_name} {self.doctor.last_name}'
+        return (
+            f'{self.doctor.first_name} {self.doctor.last_name}. '
+            f'I am a {self.specialty}, with {self.years_of_experience} years of experince.'
+            )
+    
     
 
 class Patient(models.Model):
@@ -90,7 +99,6 @@ class Patient(models.Model):
         ('Others',  'Others')
     ]
     patient = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    patient_record = models.ForeignKey(PatientRecord, on_delete=models.CASCADE)
     gender = models.CharField(max_length=7, choices=GENDER, default='Others')
     alternative_phone = models.CharField(max_length=15)
     emergency_contact_name = models.CharField(max_length=30)

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin 
 from .forms import TeleMedUserCreationForm, TeleMedUserChangeForm
-from .models import TeleMedUser, DocSpecialty, Doctor, Patient, DocAvailableDate
+from .models import TeleMedUser, Doctor, Patient, DocAvailableDate
 
 
 class TeleMedUserAdmin(UserAdmin):
@@ -14,7 +14,7 @@ class TeleMedUserAdmin(UserAdmin):
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
         ('Personal info', {'fields': ['first_name', 'last_name', 'phone']}),
-        ('Permissions', {'fields': ['is_admin']}),
+        ('Permissions', {'fields': ['is_staff', 'is_admin']}),
     ]
 
 
@@ -22,6 +22,7 @@ class TeleMedUserAdmin(UserAdmin):
         (None, {
             'classes': ['wide'],
             'fields': ['first_name', 'last_name', 'email', 'phone', 'password1', 'password2'],
+            
         }),
     ]
 
@@ -32,7 +33,7 @@ class TeleMedUserAdmin(UserAdmin):
 
 
 admin.site.register(TeleMedUser, TeleMedUserAdmin)
-admin.site.register(DocSpecialty)
+# admin.site.register(DocSpecialty)
 admin.site.register(Doctor)
 admin.site.register(Patient)
 admin.site.register(DocAvailableDate)

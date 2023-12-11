@@ -1,8 +1,10 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
 class PatientRecord(models.Model):
+    record_owner = models.ForeignKey(settings.AUTH_USER_MODEL, default='', on_delete=models.CASCADE)
     medical_condition = models.CharField(max_length=50)
     allergies = models.CharField(max_length=70,  null=True, blank=True)
     current_medication = models.CharField(max_length=150,  null=True, blank=True)
@@ -14,4 +16,7 @@ class PatientRecord(models.Model):
     referral = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return self.medical_condition
+        return (
+                f'Name: {self.record_owner.first_name} {self.record_owner.last_name}'
+                f' - Condition: {self.medical_condition}'                
+                )

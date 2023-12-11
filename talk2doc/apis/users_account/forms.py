@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from .models import TeleMedUser
 
 
-class TeleMedUserCreationForm(forms.ModelForm):
+class TeleMedUserCreationForm(UserCreationForm):
     password1 = forms.CharField()
     password2 = forms.CharField()
 
@@ -18,8 +18,8 @@ class TeleMedUserCreationForm(forms.ModelForm):
 
 
     def clean_password2(self):
-        password1 = self.cleaned_data.get(password1)
-        password2 = self.cleaned_data.get(password2)
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
         if (password1 and password2) and password1 != password2:
             raise ValidationError("Your passwords don't match, retype the passwords.")
         return password2
@@ -33,7 +33,7 @@ class TeleMedUserCreationForm(forms.ModelForm):
     
 
 
-class TeleMedUserChangeForm(forms.ModelForm):
+class TeleMedUserChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField()
 
     class Meta:
