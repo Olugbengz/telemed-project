@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import PatientRecord
 from django.contrib.auth import get_user_model
 from django.conf import settings
+
 # from apis.users_account.models import Patient
 # from apis.users_account.serializers import PatientSerializer
 USERMODEL = get_user_model()

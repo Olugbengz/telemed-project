@@ -7,7 +7,7 @@ from apis.patient_record.models import PatientRecord
 # Create your models here.
 class TeleMedUser(AbstractBaseUser, PermissionsMixin):
     username = None
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, verbose_name='email address', max_length=255)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)    
     phone = models.CharField(max_length=20)
@@ -25,6 +25,9 @@ class TeleMedUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+    def has_perm(self, perm, obj=None):
+        return True
     
     def fullname(self):
         return '%s %s' % (self.first_name, self.last_name)
@@ -100,12 +103,12 @@ class Patient(models.Model):
     ]
     patient = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     gender = models.CharField(max_length=7, choices=GENDER, default='Others')
-    alternative_phone = models.CharField(max_length=15)
-    emergency_contact_name = models.CharField(max_length=30)
-    emergency_contact_phone = models.CharField(max_length=15)
-    emergency_contact_relationship = models.CharField(max_length=20)
-    medical_plan = models.CharField(max_length=20)
-    date_modified = models.DateTimeField(TeleMedUser, auto_now=True)
+    alternative_phone = models.CharField(max_length=15, null=True, blank=True)
+    emergency_contact_name = models.CharField(max_length=30, null=True, blank=True)
+    emergency_contact_phone = models.CharField(max_length=15, null=True, blank=True)
+    emergency_contact_relationship = models.CharField(max_length=20, null=True, blank=True)
+    medical_plan = models.CharField(max_length=20, null=True, blank=True)
+    date_modified = models.DateTimeField(auto_now=True, null=True, blank=True)
     profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
 
     def __str__(self):

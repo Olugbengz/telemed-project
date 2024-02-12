@@ -14,7 +14,7 @@ class TeleMedUserAdmin(UserAdmin):
     fieldsets = [
         (None, {'fields': ['email', 'password']}),
         ('Personal info', {'fields': ['first_name', 'last_name', 'phone']}),
-        ('Permissions', {'fields': ['is_staff', 'is_admin']}),
+        ('Permissions', {'fields': ['is_active', 'is_staff', 'is_admin']}),
     ]
 
 
