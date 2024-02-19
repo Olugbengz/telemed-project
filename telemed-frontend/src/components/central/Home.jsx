@@ -31,11 +31,10 @@ function Home() {
 
     
         {users.map((user, index) => {
-            return(
+            return (
               <ul className='flex flex-col gap-2' key={index}>
                   <l1 className='bg-white text-sm text-black font-normal '>{user.email}</l1>
-              </ul>
-              
+              </ul>             
             
             )
           })  

@@ -9,7 +9,7 @@ class TeleMedUserAdmin(UserAdmin):
     form = TeleMedUserChangeForm
 
 
-    list_display = ['first_name', 'last_name', 'email', 'phone', 'is_admin']
+    list_display = ['id', 'first_name', 'last_name', 'email', 'phone', 'is_admin']
     list_filter = ['is_admin']
     fieldsets = [
         (None, {'fields': ['email', 'password']}),

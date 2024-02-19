@@ -1,8 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from .models import Doctor, Patient, DocAvailableDate
-from .serializers import DoctorSerializer, PatientSerializer, TelemedUserSerializer
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework import authentication, generics, permissions
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.views import APIView
+from .models import Doctor, Patient, DocAvailableDate
+from .serializers import DoctorSerializer, PatientSerializer, TelemedUserSerializer, UserRegistrationSerializer
+
 
 
 USERMODEL = get_user_model()
@@ -26,5 +31,13 @@ class TelemedUserDetails(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-def signin(request):
-    pass
+class UserRegistrationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        reg_serilizer = UserRegistrationSerializer(data=request.data)
+        if reg_serilizer.is_valid():
+            newuser = reg_serilizer.save()
+            if newuser:
+                return Response(status=status.HTTP_400_201_CREATED)
+        return Response(reg_serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
