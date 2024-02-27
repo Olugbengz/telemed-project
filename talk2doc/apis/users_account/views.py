@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import authentication, generics, permissions
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from .models import Doctor, Patient, DocAvailableDate
 from .serializers import DoctorSerializer, PatientSerializer, TelemedUserSerializer, UserRegistrationSerializer
 
@@ -13,21 +14,27 @@ from .serializers import DoctorSerializer, PatientSerializer, TelemedUserSeriali
 USERMODEL = get_user_model()
 
 
-class TelemedUserListCreateView(generics.ListCreateAPIView):
+class TelemedUserViewSet(viewsets.ModelViewSet):
     
     queryset = USERMODEL.objects.all()
     serializer_class = TelemedUserSerializer
     session_authentication = [authentication.SessionAuthentication]
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+   
 
-user_list_create_view = TelemedUserListCreateView.as_view()
+
+class DoctorViewSet(viewsets.ModelViewSet):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializer
 
 
-class TelemedUserDetails(generics.RetrieveUpdateDestroyAPIView):
-    queryset = USERMODEL.objects.all()
-    serializer_class = TelemedUserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+# class TelemedUserDetails(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = USERMODEL.objects.all()
+#     serializer_class = TelemedUserSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 

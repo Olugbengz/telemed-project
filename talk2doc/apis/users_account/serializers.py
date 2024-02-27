@@ -10,12 +10,21 @@ from django.conf import settings
 #         model = DocSpecialty
 #         fields = ['specialty']
 
-# USERMODEL = settings.AUTH_USER_MODEL
+USERMODEL = settings.AUTH_USER_MODEL
 
 class DoctorSerializer(serializers.HyperlinkedModelSerializer):
+    doctor = serializers.ReadOnlyField(source='doctor.fullname')
+    # doctor_id = serializers.PrimaryKeyRelatedField(queryset=USERMODEL.objects.all(), source='doctor', write_only=True, allow_null=True)
+
     class Meta:
         model = Doctor
         fields = [
+            'id',
+            # 'email', 
+            # 'first_name', 
+            # 'last_name', 
+            # 'phone',
+            'doctor',
             'specialty', 
             'language', 
             'location', 
@@ -51,71 +60,70 @@ class PatientSerializer(serializers.HyperlinkedModelSerializer):
     #     return patient
 
 class TelemedUserSerializer(serializers.HyperlinkedModelSerializer):
-    doctor = DoctorSerializer()
-    patient = PatientSerializer()
+    # doctor = DoctorSerializer()
+    # patient = PatientSerializer()
     
     
     class Meta:
         model = TeleMedUser
-        fields = ['email', 
+        fields = [
+                'id',
+                'email', 
                 'first_name', 
                 'last_name', 
                 'phone',
                 # 'is_staff', 
                 # 'is_active',
                 # 'is_admin', 
-                'doctor',
-                'patient',
+                # 'doctor',
+                # 'patient',
                 # 'patient_record',
                 ]
 
     def create(self, validated_data):
-        doctor_data = validated_data.pop('doctor')
-        patient_data = validated_data.pop('patient')
-        # patient_record = validated_data.pop('patient_record')
+        # doctor_data = validated_data.pop('doctor')
+        # patient_data = validated_data.pop('patient')    
         password = validated_data.pop('password', None)
         user = self.Meta.model(**validated_data)
 
         if password is not None:
             user.set_password(password)
-        Doctor.objects.create(user=user, **doctor_data)
-        Patient.objects.create(user=user, **patient_data)
-        # PatientRecord.objects.create(user=user, **patient_record)
+        # Doctor.objects.create(user=user, **doctor_data)
+        # Patient.objects.create(user=user, **patient_data)       
         user.save()
         return user
     
     def update(self, instance, validated_data):
-        doctor = instance.doctor
-        patient = instance.patient 
-        # patient_record = instance.patient_record
+        # doctor = instance.doctor
+        # patient = instance.patient 
+        
 
         # General user info
-        instance.email = validated_data.get('email', instance.email)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.phone = validated_data.get('phone', instance.phone)
-        instance.save()
+        # instance.email = validated_data.get('email', instance.email)
+        # instance.first_name = validated_data.get('first_name', instance.first_name)
+        # instance.last_name = validated_data.get('last_name', instance.last_name)
+        # instance.phone = validated_data.get('phone', instance.phone)
+        # instance.save()
 
         # Doctor specific info
-        Doctor_data = Doctor_data.pop(doctor)
-        instance.doctor.language = Doctor_data['language']
-        instance.doctor.location = Doctor_data['location']
-        instance.doctor.hospital = Doctor_data['hospital']
-        instance.doctor.years_of_experience = Doctor_data['years_of_experience']
-        instance.doctor.about = Doctor_data['about']        
-        instance.doctor.profile_image = Doctor_data['profile_image']
-        instance.doctor.save()
+        # Doctor_data = Doctor_data.pop(doctor)
+        # instance.doctor.language = Doctor_data['language']
+        # instance.doctor.location = Doctor_data['location']
+        # instance.doctor.hospital = Doctor_data['hospital']
+        # instance.doctor.years_of_experience = Doctor_data['years_of_experience']
+        # instance.doctor.about = Doctor_data['about']        
+        # instance.doctor.profile_image = Doctor_data['profile_image']
+        # instance.doctor.save()
 
         # Patient specific info
-        patient_data = validated_data.pop(patient)
-        instance.patient.gender = patient_data['gender']
-        instance.patient.alternative_phone = patient_data['alternative_phone']
-        instance.patient.emergency_contact_name = patient_data['emergency_contact_name']
-        instance.patient.emergency_contact_phone = patient_data['emergency_contact_phone']
-        instance.patient.emergency_contact_relationship = patient_data['emergency_contact_relationship']
-        instance.patient.medical_plan = patient_data['medical_plan']
-        # instance.profile_image = patient_data['profile_image']
-        instance.patient.save()         
+        # patient_data = validated_data.pop(patient)
+        # instance.patient.gender = patient_data['gender']
+        # instance.patient.alternative_phone = patient_data['alternative_phone']
+        # instance.patient.emergency_contact_name = patient_data['emergency_contact_name']
+        # instance.patient.emergency_contact_phone = patient_data['emergency_contact_phone']
+        # instance.patient.emergency_contact_relationship = patient_data['emergency_contact_relationship']
+        # instance.patient.medical_plan = patient_data['medical_plan']        
+        # instance.patient.save()         
 
         # Create Patient Record
         # pat_record_data = validated_data.pop(patient_record)

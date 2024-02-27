@@ -1,9 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
+router = DefaultRouter()
+router.register('users_account', views.TelemedUserViewSet)
+router.register('doctors', views.DoctorViewSet)
 
 urlpatterns = [
-    path('', views.user_list_create_view, name='telemeduser'),
-    path('login/', views.signin, name='login'),
+    path('', include(router.urls)),
     
 ]
