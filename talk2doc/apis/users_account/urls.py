@@ -4,7 +4,8 @@ from . import views
 
 router = DefaultRouter()
 router.register('users_account', views.TelemedUserViewSet)
-router.register('doctors', views.DoctorViewSet)
+router.register('doctors', views.DoctorViewSet, basename='doctors')
+router.register('patients', views.PatientViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

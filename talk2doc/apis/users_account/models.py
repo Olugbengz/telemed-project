@@ -84,7 +84,7 @@ class Doctor(models.Model):
     hospital = models.CharField(max_length=30)
     years_of_experience = models.CharField(max_length=2)
     about = models.TextField()
-    date_modified = models.DateTimeField(TeleMedUser, auto_now=True)
+    date_modified = models.DateTimeField(auto_now=True)
     profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
 
     def __str__(self):

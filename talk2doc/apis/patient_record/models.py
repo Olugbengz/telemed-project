@@ -11,8 +11,8 @@ class PatientRecord(models.Model):
     lab_test = models.CharField(max_length=100,  null=True, blank=True)
     test_result = models.CharField(max_length=100,  null=True, blank=True)
     prescription = models.TextField(max_length=250, null=True, blank=True)
-    new_appointment = models.DateField()
-    note = models.TextField( null=True, blank=True)
+    new_appointment = models.DateField(null=True, blank=True)
+    note = models.TextField(null=True, blank=True)
     referral = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):

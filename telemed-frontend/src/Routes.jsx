@@ -1,6 +1,7 @@
 import * as React from "react";
 import { createBrowserRouter } from 'react-router-dom';
-import Home from './components/central/Home';
+import Home from './components/Home';
+// import ErrorPage from "./components/ErrorPage";
 
 
 
@@ -8,5 +9,7 @@ import Home from './components/central/Home';
     {
       path: "/",
       element: <Home />,
+      // errorElement: <ErrorPage />,
+
     },
   ]);

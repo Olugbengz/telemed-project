@@ -1,4 +1,5 @@
-from django.shortcuts import render
+# from django.shortcuts import render
+# from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,7 +20,7 @@ class TelemedUserViewSet(viewsets.ModelViewSet):
     queryset = USERMODEL.objects.all()
     serializer_class = TelemedUserSerializer
     session_authentication = [authentication.SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticated]
 
    
 
@@ -27,6 +28,20 @@ class TelemedUserViewSet(viewsets.ModelViewSet):
 class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
+    # permission_classes = [IsAuthenticated]
+
+    # def get_object(self, queryset=None, **kwargs):
+    #     doc = self.kwargs.get('pk')
+    #     return get_object_or_404(USERMODEL, doctor=doc)
+
+    # def get_queryset(self):
+    #     return 
+
+
+class PatientViewSet(viewsets.ModelViewSet):
+    queryset = Patient.objects.all()
+    serializer_class = PatientSerializer
+    # permission_classes = [IsAuthenticated]
 
 
 

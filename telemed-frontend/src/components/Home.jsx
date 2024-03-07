@@ -1,5 +1,8 @@
 import {React, useState, useEffect} from 'react';
-import { getUsersDetails } from './apicalls/docapicalls';
+import { getUsersDetails } from '../components/central/apicalls/docapicalls';
+import Header from './Header';
+import DocCard from './DocCard';
+
 
 
 function Home() {
@@ -26,22 +29,30 @@ function Home() {
   }, [])
 
   return (
-    <div>
+    <div className='bg-slate-50'>
+      <Header />
     <h1>Hello world!</h1>
+    <div className='grid grid-cols-4'>
+    {users.map((user, index) => {
 
+      return (
+        <div key={index} className='m-auto'>
+          <DocCard 
+            user={user}
+           
+          />
+           
+        </div>             
+
+          )
+        })  
+
+      }
+    </div>
     
-        {users.map((user, index) => {
-            return (
-              <ul className='flex flex-col gap-2' key={index}>
-                  <l1 className='bg-white text-sm text-black font-normal '>{user.email}</l1>
-              </ul>             
-            
-            )
-          })  
         
-        }
     
-      
+      {/* <Footer /> */}
     </div>
   )
 }

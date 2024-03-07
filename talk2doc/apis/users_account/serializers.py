@@ -35,12 +35,13 @@ class DoctorSerializer(serializers.HyperlinkedModelSerializer):
         ]
         
 class PatientSerializer(serializers.HyperlinkedModelSerializer):
-    # patient_record = PatientRecordSerializer()
+    patient = serializers.ReadOnlyField(source='patient.fullname')
 
     class Meta:
         model = Patient
         fields = [
-            # 'record_owner',
+            'id',
+            'patient',
             'gender',
             'alternative_phone',
             'emergency_contact_name',
