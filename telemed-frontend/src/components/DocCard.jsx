@@ -8,7 +8,7 @@ function DocCard(props) {
           <img 
               className='w-full max-h-[160px] rounded-tl-lg rounded-tr-lg' 
               key={props.profile_image}
-              src={props.profile_image || null}
+              src={props.user.profile_image || null}
           />
 
           <h3 
