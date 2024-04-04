@@ -5,7 +5,7 @@ from django.db import models
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError("You cannot sign up without your email, please enter you email.")
+            raise ValueError("You cannot sign up without your email, enter your email.")
         email = self.normalize_email(email)
         user = self.model(
             email=email,

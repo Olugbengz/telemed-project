@@ -67,92 +67,72 @@ class TelemedUserSerializer(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         model = TeleMedUser
-        fields = [
-                'id',
-                'email', 
-                'first_name', 
-                'last_name', 
-                'phone',
-                # 'is_staff', 
-                # 'is_active',
-                # 'is_admin', 
-                # 'doctor',
-                # 'patient',
-                # 'patient_record',
-                ]
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone', ]
+        extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        # doctor_data = validated_data.pop('doctor')
-        # patient_data = validated_data.pop('patient')    
+    def create(self, validated_data):         
         password = validated_data.pop('password', None)
         user = self.Meta.model(**validated_data)
-
         if password is not None:
-            user.set_password(password)
-        # Doctor.objects.create(user=user, **doctor_data)
-        # Patient.objects.create(user=user, **patient_data)       
+            user.set_password(password)               
         user.save()
         return user
     
     def update(self, instance, validated_data):
-        # doctor = instance.doctor
-        # patient = instance.patient 
+        return super().update(instance, validated_data)
         
 
-        # General user info
-        # instance.email = validated_data.get('email', instance.email)
-        # instance.first_name = validated_data.get('first_name', instance.first_name)
-        # instance.last_name = validated_data.get('last_name', instance.last_name)
-        # instance.phone = validated_data.get('phone', instance.phone)
-        # instance.save()
 
-        # Doctor specific info
-        # Doctor_data = Doctor_data.pop(doctor)
-        # instance.doctor.language = Doctor_data['language']
-        # instance.doctor.location = Doctor_data['location']
-        # instance.doctor.hospital = Doctor_data['hospital']
-        # instance.doctor.years_of_experience = Doctor_data['years_of_experience']
-        # instance.doctor.about = Doctor_data['about']        
-        # instance.doctor.profile_image = Doctor_data['profile_image']
-        # instance.doctor.save()
 
-        # Patient specific info
-        # patient_data = validated_data.pop(patient)
-        # instance.patient.gender = patient_data['gender']
-        # instance.patient.alternative_phone = patient_data['alternative_phone']
-        # instance.patient.emergency_contact_name = patient_data['emergency_contact_name']
-        # instance.patient.emergency_contact_phone = patient_data['emergency_contact_phone']
-        # instance.patient.emergency_contact_relationship = patient_data['emergency_contact_relationship']
-        # instance.patient.medical_plan = patient_data['medical_plan']        
-        # instance.patient.save()         
 
-        # Create Patient Record
-        # pat_record_data = validated_data.pop(patient_record)
-        # instance.patient_record.record_owner = pat_record_data['record_owner']
-        # instance.patient_record.medical_condition = pat_record_data['medical_condition']
-        # instance.patient_record.allergies = pat_record_data['allergies']
-        # instance.patient_record.current_medication = pat_record_data['current_medication']
-        # instance.patient_record.lab_test = pat_record_data['lab_test']
-        # instance.patient_record.test_result = pat_record_data['test_result']
-        # instance.patient_record.prescription = pat_record_data['prescription']
-        # instance.patient_record.new_appointment = pat_record_data['new_appointment']
-        # instance.patient_record.note = pat_record_data['note']
-        # instance.patient_record.referral = pat_record_data['referral']
 
-        return super().update(instance, validated_data)
-    
-    
-class UserRegistrationSerializer(serializers.HyperlinkedModelSerializer):
 
-    class Meta:
-        model = TeleMedUser
-        fields = ['email', 'first_name', 'last_name', 'phone']
-        extra_kwargs = {'password': {'write_only': True}}
+# doctor_data = validated_data.pop('doctor')
+# patient_data = validated_data.pop('patient')   
+        
+# Doctor.objects.create(user=user, **doctor_data)
+# Patient.objects.create(user=user, **patient_data)
 
-        def create(self, validated_data):
-            password = validated_data.pop('password', None)
-            instance = self.Meta.model(**validated_data)
-            if password is not None:
-                instance.set_password(password)
-            instance.save()
-            return instance
+# doctor = instance.doctor
+# patient = instance.patient 
+
+
+# General user info
+# instance.email = validated_data.get('email', instance.email)
+# instance.first_name = validated_data.get('first_name', instance.first_name)
+# instance.last_name = validated_data.get('last_name', instance.last_name)
+# instance.phone = validated_data.get('phone', instance.phone)
+# instance.save()
+
+# Doctor specific info
+# Doctor_data = Doctor_data.pop(doctor)
+# instance.doctor.language = Doctor_data['language']
+# instance.doctor.location = Doctor_data['location']
+# instance.doctor.hospital = Doctor_data['hospital']
+# instance.doctor.years_of_experience = Doctor_data['years_of_experience']
+# instance.doctor.about = Doctor_data['about']        
+# instance.doctor.profile_image = Doctor_data['profile_image']
+# instance.doctor.save()
+
+# Patient specific info
+# patient_data = validated_data.pop(patient)
+# instance.patient.gender = patient_data['gender']
+# instance.patient.alternative_phone = patient_data['alternative_phone']
+# instance.patient.emergency_contact_name = patient_data['emergency_contact_name']
+# instance.patient.emergency_contact_phone = patient_data['emergency_contact_phone']
+# instance.patient.emergency_contact_relationship = patient_data['emergency_contact_relationship']
+# instance.patient.medical_plan = patient_data['medical_plan']        
+# instance.patient.save()         
+
+# Create Patient Record
+# pat_record_data = validated_data.pop(patient_record)
+# instance.patient_record.record_owner = pat_record_data['record_owner']
+# instance.patient_record.medical_condition = pat_record_data['medical_condition']
+# instance.patient_record.allergies = pat_record_data['allergies']
+# instance.patient_record.current_medication = pat_record_data['current_medication']
+# instance.patient_record.lab_test = pat_record_data['lab_test']
+# instance.patient_record.test_result = pat_record_data['test_result']
+# instance.patient_record.prescription = pat_record_data['prescription']
+# instance.patient_record.new_appointment = pat_record_data['new_appointment']
+# instance.patient_record.note = pat_record_data['note']
+# instance.patient_record.referral = pat_record_data['referral']

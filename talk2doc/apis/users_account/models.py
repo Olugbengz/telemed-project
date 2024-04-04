@@ -12,7 +12,7 @@ class TeleMedUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=20)    
     phone = models.CharField(max_length=20)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
