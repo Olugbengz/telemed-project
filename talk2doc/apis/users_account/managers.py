@@ -1,5 +1,10 @@
 from django.contrib.auth.models import BaseUserManager
+# from .models import TeleMedUser
+from django.conf import settings
 from django.db import models
+
+
+User = settings.AUTH_USER_MODEL
 
 
 class CustomUserManager(BaseUserManager):
@@ -33,3 +38,15 @@ class CustomUserManager(BaseUserManager):
         user.is_admin = True
         user.save(using=self._db)
         return user
+    
+
+class DoctorManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=User.Role.DOCTOR)
+
+
+class PatientManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=User.Role.PATIENT)

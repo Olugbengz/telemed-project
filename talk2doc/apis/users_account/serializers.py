@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import TeleMedUser, Doctor, Patient, DocAvailableDate
-from apis.patient_record.serializers import PatientRecordSerializer
-from apis.patient_record.models import PatientRecord
+from .models import TeleMedUser, Doctor, DoctorProfile, Patient, PatientProfile, DocAvailableDate
+# from apis.patient_record.serializers import PatientRecordSerializer
+# from apis.patient_record.models import PatientRecord
 from django.conf import settings
 
 
@@ -10,14 +10,25 @@ from django.conf import settings
 #         model = DocSpecialty
 #         fields = ['specialty']
 
-USERMODEL = settings.AUTH_USER_MODEL
+# USERMODEL = settings.AUTH_USER_MODEL
 
 class DoctorSerializer(serializers.HyperlinkedModelSerializer):
-    doctor = serializers.ReadOnlyField(source='doctor.fullname')
+    class Meta:
+        model = Doctor
+        fields = ['base_role']
+
+
+class PatientSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Patient
+        fields = ['base_role']
+
+class DoctorProfileSerializer(serializers.HyperlinkedModelSerializer):
+    doctor_profile = serializers.ReadOnlyField(source='doctor.fullname')
     # doctor_id = serializers.PrimaryKeyRelatedField(queryset=USERMODEL.objects.all(), source='doctor', write_only=True, allow_null=True)
 
     class Meta:
-        model = Doctor
+        model = DoctorProfile
         fields = [
             'id',
             # 'email', 
@@ -31,14 +42,13 @@ class DoctorSerializer(serializers.HyperlinkedModelSerializer):
             'hospital', 
             'years_of_experience', 
             'about', 
-            'profile_image'
         ]
         
-class PatientSerializer(serializers.HyperlinkedModelSerializer):
-    patient = serializers.ReadOnlyField(source='patient.fullname')
+class PatientProfileSerializer(serializers.HyperlinkedModelSerializer):
+    patient_profile = serializers.ReadOnlyField(source='patient.fullname')
 
     class Meta:
-        model = Patient
+        model = PatientProfile
         fields = [
             'id',
             'patient',
@@ -48,7 +58,6 @@ class PatientSerializer(serializers.HyperlinkedModelSerializer):
             'emergency_contact_phone',
             'emergency_contact_relationship',
             'medical_plan',
-            'profile_image',
             # 'patient_record',
         ]
     
@@ -67,7 +76,7 @@ class TelemedUserSerializer(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         model = TeleMedUser
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone', ]
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'profile_image' ]
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):         

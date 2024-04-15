@@ -2,6 +2,7 @@ import {React, useState, useEffect} from 'react';
 import { getUsersDetails } from '../components/central/apicalls/docapicalls';
 import Header from './Header';
 import DocCard from './DocCard';
+import { Link } from 'react-router-dom';
 
 
 
@@ -37,10 +38,13 @@ function Home() {
 
       return (
         <div key={index} className='m-auto'>
-          <DocCard 
-            user={user}
-           
-          />
+          <Link to={`/doc/${user.id}`}>
+              <DocCard 
+                user={user}
+              
+              />
+          </Link>
+          
            
         </div>             
 

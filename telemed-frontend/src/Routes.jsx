@@ -5,8 +5,9 @@ import Services from './components/Services';
 import About from './components/About';
 import ErrorPage from "./components/ErrorPage";
 import Signup from "./components/user-auth/Signup";
-import Signin from "./components/user-auth/signin";
+import Signin from "./components/user-auth/Signin";
 import Menu from "./components/Menu";
+import DocDetails from "./components/DocDetails";
 
 function AppLayout() {
   return (
@@ -43,6 +44,10 @@ function AppLayout() {
         {
           path: "signin/",
           element: <Signin />,
+        },
+        {
+          path: "/doc/:id",
+          element: <DocDetails />,
         },
       ] 
     }

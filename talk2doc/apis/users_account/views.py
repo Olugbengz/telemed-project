@@ -5,10 +5,16 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import authentication, generics, permissions
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, IsAdminUser
-from rest_framework.views import APIView
 from rest_framework import viewsets
-from .models import Doctor, Patient, DocAvailableDate
-from .serializers import DoctorSerializer, PatientSerializer, TelemedUserSerializer
+from django.views import APIView
+from .models import Doctor, Patient, DoctorProfile, PatientProfile, DocAvailableDate
+from .serializers import (
+    DoctorSerializer, 
+    DoctorProfileSerializer, 
+    PatientSerializer, 
+    PatientProfileSerializer, 
+    TelemedUserSerializer
+    )
 
 
 
@@ -22,12 +28,20 @@ class TelemedUserViewSet(viewsets.ModelViewSet):
     # session_authentication = [authentication.SessionAuthentication]
     # permission_classes = [IsAdminUser]
 
-   
-
 
 class DoctorViewSet(viewsets.ModelViewSet):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
+
+
+class PatientViewSet(viewsets.ModelViewSet):
+    queryset = Patient.objects.all()
+    serializer_class = PatientSerializer
+
+
+class DoctorProfileViewSet(viewsets.ModelViewSet):
+    queryset = DoctorProfile.objects.all()
+    serializer_class = DoctorProfileSerializer
     # permission_classes = [IsAuthenticated]
 
     # def get_object(self, queryset=None, **kwargs):
@@ -38,9 +52,9 @@ class DoctorViewSet(viewsets.ModelViewSet):
     #     return 
 
 
-class PatientViewSet(viewsets.ModelViewSet):
-    queryset = Patient.objects.all()
-    serializer_class = PatientSerializer
+class PatientProfileViewSet(viewsets.ModelViewSet):
+    queryset = PatientProfile.objects.all()
+    serializer_class = PatientProfileSerializer
     # permission_classes = [IsAuthenticated]
 
 
@@ -53,13 +67,13 @@ class PatientViewSet(viewsets.ModelViewSet):
 
 
 
-class UserRegistrationView(APIView):
-    permission_classes = [AllowAny]
+# class UserRegistrationView(APIView):
+#     permission_classes = [AllowAny]
 
-    def post(self, request):
-        reg_serilizer = TelemedUserSerializer(data=request.data)
-        if reg_serilizer.is_valid():
-            user = reg_serilizer.save()
-            if user:
-                return Response(status=status.HTTP_400_201_CREATED)
-        return Response(reg_serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         reg_serilizer = TelemedUserSerializer(data=request.data)
+#         if reg_serilizer.is_valid():
+#             user = reg_serilizer.save()
+#             if user:
+#                 return Response(status=status.HTTP_400_201_CREATED)
+#         return Response(reg_serilizer.errors, status=status.HTTP_400_BAD_REQUEST)

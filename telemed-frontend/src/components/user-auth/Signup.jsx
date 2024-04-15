@@ -3,8 +3,10 @@ import axios from 'axios';
 import axiosInstance from '../../axios';
 import {useNavigate} from 'react-router-dom';
 
+
 function Signup() {
-    const navigate = useNavigate()
+
+    // const navigate = useNavigate()
     const [formData, setFormData] = useState({
         email: "",
         first_name: "",
@@ -13,6 +15,24 @@ function Signup() {
         password: "",
         
     })
+
+
+
+const register = (user) => {
+        return fetch(`${API}users_account/`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .catch((err) => console.log(err));
+      };
+
 
 function handleChange(event) {
     const {name, value, type} = event.target

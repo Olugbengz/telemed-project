@@ -1,16 +1,25 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from .managers import CustomUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+
+from .managers import CustomUserManager, DoctorManager, PatientManager
 from apis.patient_record.models import PatientRecord
 
 # Create your models here.
 class TeleMedUser(AbstractBaseUser, PermissionsMixin):
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        DOCTOR = "DOCTOR", "Doctor"
+        PATIENT = "PATIENT", "Patient"
+
+
     username = None
     email = models.EmailField(unique=True, verbose_name='email address', max_length=255)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)    
     phone = models.CharField(max_length=20)
+    role = models.CharField(max_length=20, choices=Role.choices, blank=True, null=True)
+    profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
@@ -22,6 +31,12 @@ class TeleMedUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    base_role = Role.ADMIN
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.role = self.base_role
+            return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.email
@@ -31,22 +46,21 @@ class TeleMedUser(AbstractBaseUser, PermissionsMixin):
     
     def fullname(self):
         return '%s %s' % (self.first_name, self.last_name)
-    
 
-    # @property
-    # def is_staff(self):
-    #     return self.is_admin
-    
 
-# class DocSpecialty(models.Model):
-   
-#    specialty = models.CharField(max_length=30, choices=DOC_SPECIALTY, default='FAMILY MEDICINE')
-   
-#    def __str__(self):
-#        return self.specialty
+
+
+class Doctor(TeleMedUser):
+    base_role = TeleMedUser.Role.DOCTOR
+
+    doctor = DoctorManager()
+
+    class Meta:
+        proxy = True
+
    
 
-class Doctor(models.Model):
+class DoctorProfile(models.Model):
     DOC_SPECIALTY = [
         ('INTERNAL MEDICINE', 'Internal Medicine'),
         ('PEDIATRICIAN', 'Pediatrician'),
@@ -84,8 +98,8 @@ class Doctor(models.Model):
     hospital = models.CharField(max_length=30)
     years_of_experience = models.CharField(max_length=2)
     about = models.TextField()
-    date_modified = models.DateTimeField(auto_now=True)
-    profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
+    
+    
 
     def __str__(self):
         return (
@@ -94,8 +108,15 @@ class Doctor(models.Model):
             )
     
     
+class Patient(TeleMedUser):
+    base_role = TeleMedUser.Role.PATIENT
 
-class Patient(models.Model):
+    patient = PatientManager()
+
+    class Meta:
+        proxy = True
+
+class PatientProfile(models.Model):
     GENDER = [
         ('M', 'Male'),
         ('F', 'Female'),
@@ -108,8 +129,7 @@ class Patient(models.Model):
     emergency_contact_phone = models.CharField(max_length=15, null=True, blank=True)
     emergency_contact_relationship = models.CharField(max_length=20, null=True, blank=True)
     medical_plan = models.CharField(max_length=20, null=True, blank=True)
-    date_modified = models.DateTimeField(auto_now=True, null=True, blank=True)
-    profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
+    
 
     def __str__(self):
         return f'{self.patient.first_name} {self.patient.last_name}'
