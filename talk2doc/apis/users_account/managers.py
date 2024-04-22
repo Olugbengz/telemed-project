@@ -40,13 +40,6 @@ class CustomUserManager(BaseUserManager):
         return user
     
 
-class DoctorManager(BaseUserManager):
-    def get_queryset(self, *args, **kwargs):
-        results = super().get_queryset(*args, **kwargs)
-        return results.filter(role=User.Role.DOCTOR)
 
 
-class PatientManager(BaseUserManager):
-    def get_queryset(self, *args, **kwargs):
-        results = super().get_queryset(*args, **kwargs)
-        return results.filter(role=User.Role.PATIENT)
+

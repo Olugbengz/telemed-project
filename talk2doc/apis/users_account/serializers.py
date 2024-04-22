@@ -1,8 +1,114 @@
 from rest_framework import serializers
 from .models import TeleMedUser, Doctor, DoctorProfile, Patient, PatientProfile, DocAvailableDate
+from django.conf import settings
 # from apis.patient_record.serializers import PatientRecordSerializer
 # from apis.patient_record.models import PatientRecord
-from django.conf import settings
+
+
+
+class TeleMedUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeleMedUser
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'role', 'profile_image']
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'role', 'profile_image']
+
+class DoctorProfileSerializer(serializers.ModelSerializer):
+    doctor = DoctorSerializer(many=False)
+    class Meta:
+        model = DoctorProfile
+        fields = '__all__'
+
+class PatientSerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Patient
+        fields = '__all__'
+
+class PatientProfileSerializer(serializers.ModelSerializer):
+    patient = PatientSerializer(many=False)
+    class Meta:
+        model = PatientProfile
+        fields = '__all__'
+    
+
+#  Update Doctor's Account Profile
+# class DoctorSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Doctor
+#         fields = '__all__'
+
+       
+    # def create(self, validated_data):         
+    #     doc_profile_data = validated_data.pop('doctor')  
+    #     doctor = Doctor.objects.create(**validated_data)
+    #     DoctorProfile.objects.create(doctor=doctor, **doc_profile_data)
+    #     return Patient    
+
+    
+# class DoctorProfileSerializer(serializers.ModelSerializer):
+#     doctor = DoctorSerializer(many=False)
+   
+#     class Meta:
+#         model = DoctorProfile
+#         fields = '__all__'
+
+
+# Update Patient's Account Profile
+# class PatientSerializer(serializers.ModelSerializer):
+    
+#     class Meta:
+#         model = Patient
+#         fields = '__all__'
+
+# class PatientProfileSerializer(serializers.ModelSerializer):
+#     patient = PatientSerializer(many=False)
+#     class Meta:
+#         model = PatientProfile
+#         fields = '__all__'
+
+    # def create(self, validated_data): 
+    #     patient_profile_data = validated_data.pop('patient')  
+    #     patient = Patient.objects.create(**validated_data)
+    #     PatientProfile.objects.create(patient=patient, **patient_profile_data)
+    #     return Patient 
+
+      
+       
+
+
+# Create All Users Including Admins, And Members Of Staff, Will Use Django's Built-in Group Feature
+
+# class TelemedUserSerializer(serializers.ModelSerializer):
+    
+    
+#     class Meta:
+#         model = TeleMedUser
+#         fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'profile_image', 'base_role']
+
+#         extra_kwargs = {'password': {'write_only': True}}
+
+#     def create(self, validated_data):         
+#         password = validated_data.pop('password', None)
+#         user = self.Meta.model(**validated_data)
+
+#         if password is not None:
+#             user.set_password(password)               
+#         user.save()
+#         return user
+    
+#     def update(self, instance, validated_data):
+#         return super().update(instance, validated_data)
+        
+        
+
+
+#######################################################################
+        #  BELOW LINES OF CODE WILL BE REVIEWED IN THE FUTURE 
+#######################################################################
 
 
 # class DocSpecialtySerializer(serializers.HyperlinkedModelSerializer):
@@ -12,88 +118,13 @@ from django.conf import settings
 
 # USERMODEL = settings.AUTH_USER_MODEL
 
-class DoctorSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Doctor
-        fields = ['base_role']
 
+# class DocSpecialtySerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = DocSpecialty
+#         fields = ['specialty']
 
-class PatientSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Patient
-        fields = ['base_role']
-
-class DoctorProfileSerializer(serializers.HyperlinkedModelSerializer):
-    doctor_profile = serializers.ReadOnlyField(source='doctor.fullname')
-    # doctor_id = serializers.PrimaryKeyRelatedField(queryset=USERMODEL.objects.all(), source='doctor', write_only=True, allow_null=True)
-
-    class Meta:
-        model = DoctorProfile
-        fields = [
-            'id',
-            # 'email', 
-            # 'first_name', 
-            # 'last_name', 
-            # 'phone',
-            'doctor',
-            'specialty', 
-            'language', 
-            'location', 
-            'hospital', 
-            'years_of_experience', 
-            'about', 
-        ]
-        
-class PatientProfileSerializer(serializers.HyperlinkedModelSerializer):
-    patient_profile = serializers.ReadOnlyField(source='patient.fullname')
-
-    class Meta:
-        model = PatientProfile
-        fields = [
-            'id',
-            'patient',
-            'gender',
-            'alternative_phone',
-            'emergency_contact_name',
-            'emergency_contact_phone',
-            'emergency_contact_relationship',
-            'medical_plan',
-            # 'patient_record',
-        ]
-    
-    # def create(self, validated_data):
-    #     patient_record_data = validated_data.pop('patient_record')        
-    #     patient = self.Meta.model(**validated_data)
-    #     for record in patient_record_data:
-    #         PatientRecord.objects.create(patient=patient, **record)        
-    #     patient.save()
-    #     return patient
-
-class TelemedUserSerializer(serializers.HyperlinkedModelSerializer):
-    # doctor = DoctorSerializer()
-    # patient = PatientSerializer()
-    
-    
-    class Meta:
-        model = TeleMedUser
-        fields = ['id', 'email', 'first_name', 'last_name', 'phone', 'profile_image' ]
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):         
-        password = validated_data.pop('password', None)
-        user = self.Meta.model(**validated_data)
-        if password is not None:
-            user.set_password(password)               
-        user.save()
-        return user
-    
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
-        
-
-
-
-
+# USERMODEL = settings.AUTH_USER_MODEL
 
 
 # doctor_data = validated_data.pop('doctor')
@@ -145,3 +176,10 @@ class TelemedUserSerializer(serializers.HyperlinkedModelSerializer):
 # instance.patient_record.new_appointment = pat_record_data['new_appointment']
 # instance.patient_record.note = pat_record_data['note']
 # instance.patient_record.referral = pat_record_data['referral']
+
+#####################################################
+# Response fron ChatGPT
+#####################################################
+
+# from .models import TeleMedUser, DoctorProfile, PatientProfile
+

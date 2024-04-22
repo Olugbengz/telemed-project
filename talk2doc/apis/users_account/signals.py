@@ -6,10 +6,10 @@ from .models import TeleMedUser, Doctor, DoctorProfile, Patient, PatientProfile
 @receiver(post_save, sender=Doctor)
 def create_doctor_profile(sender, instance, created, **kwargs):
     if created and instance.role == 'DOCTOR':
-        DoctorProfile.objects.create(user=instance)
+        DoctorProfile.objects.create(doctor=instance)
 
 
 @receiver(post_save, sender=Patient)
 def create_patient_profile(sender, instance, created, **kwargs):
-    if created and instance.role == 'DOCTOR':
-        PatientProfile.objects.create(user=instance)
+    if created and instance.role == 'PATIENT':
+        PatientProfile.objects.create(patient=instance)

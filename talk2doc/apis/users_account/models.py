@@ -2,36 +2,40 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-from .managers import CustomUserManager, DoctorManager, PatientManager
+from .managers import CustomUserManager
 from apis.patient_record.models import PatientRecord
 
 # Create your models here.
+
+
+
 class TeleMedUser(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
         DOCTOR = "DOCTOR", "Doctor"
         PATIENT = "PATIENT", "Patient"
-
-
+   
+    base_role = Role.ADMIN
     username = None
     email = models.EmailField(unique=True, verbose_name='email address', max_length=255)
-    first_name = models.CharField(max_length=20)
-    last_name = models.CharField(max_length=20)    
-    phone = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=20, null=True, blank=True, )
+    last_name = models.CharField(max_length=20, null=True, blank=True, )    
+    phone = models.CharField(max_length=20, null=True, blank=True, )
     role = models.CharField(max_length=20, choices=Role.choices, blank=True, null=True)
     profile_image = models.ImageField(null=True, blank=True, upload_to='images/')
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    date_added = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField(auto_now=True)
+    is_staff = models.BooleanField(default=False, null=True, blank=True, )
+    is_active = models.BooleanField(default=False, null=True, blank=True, )
+    is_admin = models.BooleanField(default=False, null=True, blank=True, )
+    date_added = models.DateTimeField(auto_now_add=True, null=True, blank=True, )
+    date_updated = models.DateTimeField(auto_now=True, null=True, blank=True, )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'phone']
+    
 
     objects = CustomUserManager()
 
-    base_role = Role.ADMIN
+    
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -49,6 +53,11 @@ class TeleMedUser(AbstractBaseUser, PermissionsMixin):
 
 
 
+class DoctorManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=TeleMedUser.Role.DOCTOR)
+
 
 class Doctor(TeleMedUser):
     base_role = TeleMedUser.Role.DOCTOR
@@ -57,6 +66,7 @@ class Doctor(TeleMedUser):
 
     class Meta:
         proxy = True
+
 
    
 
@@ -107,6 +117,11 @@ class DoctorProfile(models.Model):
             f'I am a {self.specialty}, with {self.years_of_experience} years of experince.'
             )
     
+
+class PatientManager(BaseUserManager):
+    def get_queryset(self, *args, **kwargs):
+        results = super().get_queryset(*args, **kwargs)
+        return results.filter(role=TeleMedUser.Role.PATIENT)
     
 class Patient(TeleMedUser):
     base_role = TeleMedUser.Role.PATIENT
@@ -115,6 +130,8 @@ class Patient(TeleMedUser):
 
     class Meta:
         proxy = True
+
+
 
 class PatientProfile(models.Model):
     GENDER = [

@@ -38,4 +38,4 @@ class TeleMedUserChangeForm(UserChangeForm):
 
     class Meta:
         model = TeleMedUser
-        fields = ['first_name', 'last_name', 'email', 'phone', 'is_active', 'is_admin']
+        fields = ['first_name', 'last_name', 'email', 'phone', 'profile_image', 'is_active', 'is_admin']

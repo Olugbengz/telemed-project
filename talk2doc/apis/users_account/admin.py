@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin 
 from .forms import TeleMedUserCreationForm, TeleMedUserChangeForm
-from .models import TeleMedUser, DoctorProfile, PatientProfile, DocAvailableDate
+from .models import TeleMedUser, Doctor, DoctorProfile, Patient, PatientProfile, DocAvailableDate
 
 
 class TeleMedUserAdmin(UserAdmin):
@@ -34,6 +34,8 @@ class TeleMedUserAdmin(UserAdmin):
 
 admin.site.register(TeleMedUser, TeleMedUserAdmin)
 # admin.site.register(DocSpecialty)
+admin.site.register(Doctor)
+admin.site.register(Patient)
 admin.site.register(DoctorProfile)
 admin.site.register(PatientProfile)
 admin.site.register(DocAvailableDate)
